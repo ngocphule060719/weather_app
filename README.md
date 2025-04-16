@@ -18,6 +18,17 @@ A Flutter weather app
 4. Configure platform permissions:
     - **iOS**: Add `NSLocationWhenInUseUsageDescription` in `ios/Runner/Info.plist`.
     - **Android**: Add `ACCESS_FINE_LOCATION` and `ACCESS_COARSE_LOCATION` in `android/app/src/main/AndroidManifest.xml`.
+5. Add OpenWeatherMap API key to `lib/core/utils/constants.dart` with:
+    ```dart
+    const String WEATHER_API_KEY = 'YOUR_API_KEY';
+    const String WEATHER_API_BASE_URL = 'https://api.openweathermap.org/data/3.0';
 
 ## Setup Notes
 - Platform permissions are configured separately to enable location-based weather features.
+
+## Architecture
+- Follows Clean Architecture with layers: core, features/weather (data, domain, presentation).
+- Core includes:
+    - `Failure` for error handling (default: "Something went wrong at our end!").
+    - `Parser` for robust JSON parsing.
+    - `NetworkClient` with scalable Dio setup (get, post, put, delete methods, interceptors for headers/logging, no default retries).
