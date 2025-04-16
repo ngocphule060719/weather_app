@@ -32,3 +32,4 @@ A Flutter weather app
     - `Failure` for error handling (default: "Something went wrong at our end!").
     - `Parser` for robust JSON parsing.
     - `NetworkClient` with scalable Dio setup (get, post, put, delete methods, interceptors for headers/logging, no default retries).
+- Uses GetX for dependency injection, initialized in `lib/app/di/dependencies.dart`.

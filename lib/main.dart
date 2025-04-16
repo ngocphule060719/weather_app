@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:weather_app/app/di/dependencies.dart';
 
 void main() {
+  Dependencies.init();
   runApp(const MyApp());
 }
 
@@ -10,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Weather App',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
