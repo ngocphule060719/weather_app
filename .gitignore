@@ -37,6 +37,7 @@ migrate_working_dir/
 build/
 .fvm/
 /lib/core/utils/constants.dart
+*.mocks.dart
 
 # Symbolication related
 app.*.symbols
