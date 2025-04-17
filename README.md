@@ -31,7 +31,7 @@ A Flutter weather app
 ## Architecture
 - Follows Clean Architecture with layers: core, app, features/weather.
 - Core includes:
-    - `Failure`: Error handling (default: "Something went wrong at our end!").
+    - `Failure`: Error handling (default display message: "Something went wrong at our end!").
     - `Parser`: Robust JSON parsing.
     - `NetworkClient`: Scalable Dio setup (get, post, put, delete methods, interceptors for headers/logging, no default retries).
     - `UseCase`: Base class for use cases.
@@ -41,3 +41,7 @@ A Flutter weather app
         - `Weather`: Entity for current temperature, location, and 4-day forecast.
         - `WeatherRepository`: Interface for weather data.
         - `GetWeather`: Use case to fetch weather, tested with Mockito.
+    - Data:
+        - `WeatherModel`: Maps `One Call` API responses with `toEntity()`, using `CurrentWeatherModel` and `DailyWeatherModel` for nested parsing.
+        - `WeatherRemoteDataSource`: Fetches weather via API, handles general error.
+        - `WeatherRepositoryImpl`: Implements repository, converting `WeatherModel` to `Weather`.

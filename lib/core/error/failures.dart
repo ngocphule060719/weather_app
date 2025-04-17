@@ -6,5 +6,7 @@ class GeneralFailure implements Failure {
   @override
   String get message => 'Something went wrong at our end!';
 
-  const GeneralFailure();
+  final String errorMessage;
+
+  const GeneralFailure([this.errorMessage = '']);
 }
