@@ -24,6 +24,7 @@ A Flutter weather app
     const String WEATHER_API_KEY = 'YOUR_API_KEY';
     const String WEATHER_API_BASE_URL = 'https://api.openweathermap.org/data/3.0';
 7. Generate mocks for tests: `flutter pub run build_runner build --delete-conflicting-outputs`.
+8. Grant location permissions when prompted (Android: enable GPS and allow location access).
 
 ## Setup Notes
 - Platform permissions are configured separately to enable location-based weather features.
@@ -35,6 +36,9 @@ A Flutter weather app
     - `Parser`: Robust JSON parsing.
     - `NetworkClient`: Scalable Dio setup (get, post, put, delete methods, interceptors for headers/logging, no default retries).
     - `UseCase`: Base class for use cases.
+    - `LocationService`: Manages location access with two functions:
+        - `requestLocationPermission`: Requests/checks location permissions, throwing exceptions.
+        - `getCurrentLocation`: Fetches device coordinates with a 10-second timeout.
 - App: Uses `GetX` for dependency injection, initialized in `lib/app/di/dependencies.dart`.
 - Features/Weather:
     - Domain:
@@ -45,3 +49,9 @@ A Flutter weather app
         - `WeatherModel`: Maps `One Call` API responses with `toEntity()`, using `CurrentWeatherModel` and `DailyWeatherModel` for nested parsing.
         - `WeatherRemoteDataSource`: Fetches weather via API, handles general error.
         - `WeatherRepositoryImpl`: Implements repository, converting `WeatherModel` to `Weather`.
+
+## Running the App
+- Analyze: `flutter analyze`
+- Test: `flutter test test/unit/core/services/location_service_test.dart`
+- Run: `flutter run`
+
