@@ -5,6 +5,7 @@ import 'package:weather_app/core/error/failures.dart';
 import 'package:weather_app/features/weather/domain/entities/weather.dart';
 import 'package:weather_app/features/weather/domain/repositories/weather_repository.dart';
 import 'package:weather_app/features/weather/domain/usecases/get_weather.dart';
+import 'package:weather_app/features/weather/domain/usecases/location_params.dart';
 
 import 'get_weather_test.mocks.dart';
 
