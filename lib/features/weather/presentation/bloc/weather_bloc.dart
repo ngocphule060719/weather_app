@@ -48,7 +48,9 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
     Emitter<WeatherState> emit,
   ) {
     if (weather != null) {
-      emit(WeatherLoaded(weather));
+      emit(WeatherLoaded(weather.copyWith(
+        dailyForecasts: weather.dailyForecasts.take(4).toList(),
+      )));
       return;
     }
 

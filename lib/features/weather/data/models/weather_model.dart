@@ -26,7 +26,7 @@ class WeatherModel {
   Weather toEntity() {
     return Weather(
       currentTemperature: currentWeather.toEntity(),
-      locationName: locationName,
+      locationName: locationName.split('/').last.replaceAll("_", " "),
       dailyForecasts: dailyWeathers.map((e) => e.toEntity()).toList(),
     );
   }

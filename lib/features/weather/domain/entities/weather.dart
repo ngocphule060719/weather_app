@@ -11,6 +11,18 @@ class Weather extends Equatable {
     required this.dailyForecasts,
   });
 
+  Weather copyWith({
+    double? currentTemperature,
+    String? locationName,
+    List<DailyForecast>? dailyForecasts,
+  }) {
+    return Weather(
+      currentTemperature: currentTemperature ?? this.currentTemperature,
+      locationName: locationName ?? this.locationName,
+      dailyForecasts: dailyForecasts ?? this.dailyForecasts,
+    );
+  }
+
   @override
   List<Object?> get props => [currentTemperature, locationName, dailyForecasts];
 }

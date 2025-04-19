@@ -39,7 +39,10 @@ A Flutter weather app
     - `LocationService`: Manages location access with two functions:
         - `requestLocationPermission`: Requests/checks location permissions, throwing exceptions.
         - `getCurrentLocation`: Fetches device coordinates with a 10-second timeout.
-- App: Uses `GetX` for dependency injection, initialized in `lib/app/di/dependencies.dart`.
+    - `AppTheme`: Defines light theme with centralized `AppColors`
+- App: 
+    - Uses `GetX` for dependency injection, initialized in `lib/app/di/dependencies.dart`.
+    - `main.dart`: Entry point, applies theme, and renders `WeatherScreen` with `WeatherBloc`.
 - Features/Weather:
     - Domain:
         - `Weather`: Entity for current temperature, location, and 4-day forecast.
@@ -54,6 +57,11 @@ A Flutter weather app
         - `WeatherBloc`: Manages state for weather fetching, integrates `LocationService`.
         - `WeatherState`: States extend `Equatable` for proper comparison.
         - `WeatherEvent`: Initiates weather fetching.
+        - `WeatherScreen`: Displays loading, weather, or error states.
+        - Widgets include: 
+            - `WeatherInfoWidget`: Shows temperature, location, and 4-day forecast with slide animation.
+            - `WeatherErrorWidget`: Displays error with retry button.
+            - `LoadingWidget`: Shows rotating loading icon.
 
 ## Running the App
 - Analyze: `flutter analyze`
