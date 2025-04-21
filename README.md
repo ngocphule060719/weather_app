@@ -1,6 +1,6 @@
 # weather_app
 
-A Flutter weather app
+A Flutter Weather app displaying current temperature, location, and a 4-day forecast via OpenWeatherMap One Call API.
 
 ## Setup
 1. Clone the repository.
@@ -47,7 +47,7 @@ A Flutter weather app
     - Domain:
         - `Weather`: Entity for current temperature, location, and 4-day forecast.
         - `WeatherRepository`: Interface for weather data.
-        - `GetWeather`: Use case to fetch weather, tested with `Mockito`.
+        - `GetWeather`: Use case to fetch weather.
         - `LocationParams`: Parameters for `GetWeather`.
     - Data:
         - `WeatherModel`: Maps `One Call` API responses with `toEntity()`, using `CurrentWeatherModel` and `DailyWeatherModel` for nested parsing.
@@ -58,13 +58,13 @@ A Flutter weather app
         - `WeatherState`: States extend `Equatable` for proper comparison.
         - `WeatherEvent`: Initiates weather fetching.
         - `WeatherScreen`: Displays loading, weather, or error states.
-        - Widgets include: 
+        - Widgets: 
             - `WeatherInfoWidget`: Shows temperature, location, and 4-day forecast with slide animation.
             - `WeatherErrorWidget`: Displays error with retry button.
             - `LoadingWidget`: Shows rotating loading icon.
 
 ## Running the App
 - Analyze: `flutter analyze`
-- Test: `flutter test test/unit/core/services/location_service_test.dart`
+- Test: `flutter test test_file_name.dart`
 - Run: `flutter run`
 

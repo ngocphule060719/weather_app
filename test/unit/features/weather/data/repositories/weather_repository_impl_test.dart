@@ -35,7 +35,7 @@ void main() {
 
     expect(result.$1, isNull);
     expect(result.$2, isA<Weather>());
-    expect(result.$2!.locationName, 'Asia/Ho_Chi_Minh');
+    expect(result.$2!.locationName, 'Ho Chi Minh');
     expect(result.$2!.currentTemperature, 30.0);
     expect(result.$2!.dailyForecasts.first.avgTemperature, 31.0);
     verify(mockDataSource.getWeather(10.76, 106.66)).called(1);

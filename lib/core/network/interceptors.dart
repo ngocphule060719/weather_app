@@ -8,7 +8,7 @@ class RetryInterceptor extends Interceptor {
   RetryInterceptor({required this.dio, required this.maxRetries});
 
   @override
-  void onError(DioException err, ErrorInterceptorHandler handler) async {
+  Future<void> onError(DioException err, ErrorInterceptorHandler handler) async {
     final attempt = err.requestOptions._retryCount;
     if (attempt < maxRetries && _shouldRetry(err)) {
       err.requestOptions._retryCount = attempt + 1;
