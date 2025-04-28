@@ -12,7 +12,6 @@ class NetworkClient {
     this.baseUrl = WEATHER_API_BASE_URL,
     Map<String, dynamic>? defaultQueryParameters,
     Map<String, String>? defaultHeaders,
-    int maxRetries = 0,
     Duration connectTimeout = const Duration(seconds: 10),
     Duration receiveTimeout = const Duration(seconds: 10),
   }) : dio = Dio(BaseOptions(
@@ -27,7 +26,6 @@ class NetworkClient {
           receiveTimeout: receiveTimeout,
         )) {
     dio.interceptors.addAll([
-      RetryInterceptor(dio: dio, maxRetries: maxRetries),
       LogInterceptor(
         requestBody: true,
         responseBody: true,

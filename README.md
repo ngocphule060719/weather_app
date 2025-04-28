@@ -34,7 +34,7 @@ A Flutter Weather app displaying current temperature, location, and a 4-day fore
 - Core includes:
     - `Failure`: Error handling extend `Equatable` (default display message: "Something went wrong at our end!").
     - `Parser`: Robust JSON parsing.
-    - `NetworkClient`: Scalable Dio setup (get, post, put, delete methods, interceptors for headers/logging, no default retries).
+    - `NetworkClient`: Scalable Dio setup (get, post, put, delete methods, interceptors for headers/logging).
     - `UseCase`: Base class for use cases.
     - `LocationService`: Manages location access with two functions:
         - `requestLocationPermission`: Requests/checks location permissions, throwing exceptions.
