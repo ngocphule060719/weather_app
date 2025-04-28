@@ -1,10 +1,10 @@
 import 'package:weather_app/core/usecases/usecase.dart';
 import 'package:weather_app/core/utils/result.dart';
+import 'package:weather_app/features/weather/domain/entities/location.dart';
 import 'package:weather_app/features/weather/domain/entities/weather.dart';
 import 'package:weather_app/features/weather/domain/repositories/weather_repository.dart';
-import 'package:weather_app/features/weather/domain/usecases/location_params.dart';
 
-class GetWeather implements Usecase<Weather, LocationParams> {
+class GetWeather implements Usecase<Weather, Location> {
   final WeatherRepository repository;
 
   GetWeather({
@@ -12,7 +12,10 @@ class GetWeather implements Usecase<Weather, LocationParams> {
   });
 
   @override
-  Future<Result<Weather>> call(LocationParams params) async {
-    return await repository.getWeather(params.lat, params.lon);
+  Future<Result<Weather>> call(Location location) async {
+    return await repository.getWeather(
+      location.latitude,
+      location.longitude,
+    );
   }
 }

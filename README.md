@@ -36,7 +36,8 @@ A Flutter Weather app displaying current temperature, location, and a 4-day fore
     - `Failure`: Error handling extend `Equatable` (default display message: "Something went wrong at our end!").
     - `Parser`: Robust JSON parsing with type-safe extensions.
     - `NetworkClient`: Scalable Dio setup (get, post, put, delete methods, interceptors for headers/logging).
-    - `UseCase`: Base class for use cases.
+    - Use Cases:
+        - `Usecase<Type, Params>`: Base class for async operations
     - `LocationService`: Manages location access with two functions:
         - `requestLocationPermission`: Requests/checks location permissions, throwing exceptions.
         - `getCurrentLocation`: Fetches device coordinates with a 10-second timeout.
@@ -48,9 +49,9 @@ A Flutter Weather app displaying current temperature, location, and a 4-day fore
 - Features/Weather:
     - Domain:
         - `Weather`: Entity for current temperature, location, and 4-day forecast.
+        - `Location`: Entity for geographical coordinates with validation and conversion utilities.
         - `WeatherRepository`: Interface for weather data.
-        - `GetWeather`: Use case to fetch weather.
-        - `LocationParams`: Parameters for `GetWeather`.
+        - `GetWeather`: Use case to fetch weather using Location entity.
     - Data:
         - `WeatherModel`: Maps `One Call` API responses with `toEntity()`, using `CurrentWeatherModel` and `DailyWeatherModel` for nested parsing.
         - `WeatherRemoteDataSource`: Fetches weather via API, handles general error.

@@ -1,19 +1,21 @@
+import 'dart:async';
 import 'package:geolocator/geolocator.dart';
 
 class LocationService {
+  static const _timeoutDuration = Duration(seconds: 10);
+
   Future<bool> requestLocationPermission() async {
     final isLocationEnabled = await Geolocator.isLocationServiceEnabled();
     if (!isLocationEnabled) {
       throw const LocationServiceDisabledException();
     }
 
-    LocationPermission permission = await Geolocator.checkPermission();
+    final permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-    }
-
-    if (permission == LocationPermission.denied) {
-      throw const PermissionDeniedException('Location permission denied');
+      final newPermission = await Geolocator.requestPermission();
+      if (newPermission == LocationPermission.denied) {
+        throw const PermissionDeniedException('Location permission denied');
+      }
     }
 
     if (permission == LocationPermission.deniedForever) {
@@ -27,9 +29,11 @@ class LocationService {
   Future<(double lat, double lon)> getCurrentPosition() async {
     try {
       final position = await Geolocator.getCurrentPosition(
-        timeLimit: const Duration(seconds: 10),
+        timeLimit: _timeoutDuration,
       );
       return (position.latitude, position.longitude);
+    } on TimeoutException {
+      throw Exception('Location request timed out');
     } catch (error) {
       throw Exception('Failed to fetch location: $error');
     }

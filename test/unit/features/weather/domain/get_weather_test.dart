@@ -3,10 +3,10 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:weather_app/core/error/failures.dart';
 import 'package:weather_app/core/utils/result.dart';
+import 'package:weather_app/features/weather/domain/entities/location.dart';
 import 'package:weather_app/features/weather/domain/entities/weather.dart';
 import 'package:weather_app/features/weather/domain/repositories/weather_repository.dart';
 import 'package:weather_app/features/weather/domain/usecases/get_weather.dart';
-import 'package:weather_app/features/weather/domain/usecases/location_params.dart';
 
 import 'get_weather_test.mocks.dart';
 
@@ -21,32 +21,44 @@ void main() {
   });
 
   test('GetWeather should return Weather on success', () async {
+    final location = const Location(latitude: 10.76, longitude: 106.66);
     final weather = Weather(
-        currentTemperature: 30.0,
-        locationName: 'HoChiMinh',
-        dailyForecasts: [
-          DailyForecast(date: DateTime(2025, 4, 17), avgTemperature: 28.0),
-        ]);
+      currentTemperature: 30.0,
+      locationName: 'HoChiMinh',
+      dailyForecasts: [
+        DailyForecast(date: DateTime(2025, 4, 17), avgTemperature: 28.0),
+      ],
+    );
 
     when(mockWeatherRepository.getWeather(10.76, 106.66))
         .thenAnswer((_) async => Success(weather));
 
-    final result = await usecase(LocationParams(lat: 10.76, lon: 106.66));
+    final result = await usecase(location);
 
-    expect(result, isA<Success<Weather>>());
-    expect((result as Success<Weather>).data, weather);
+    switch (result) {
+      case Success(data: final data):
+        expect(data, weather);
+      case Error():
+        fail('Expected Success but got Error');
+    }
     verify(mockWeatherRepository.getWeather(10.76, 106.66)).called(1);
   });
 
   test('GetWeather should return Failure on error', () async {
-    const failure = GeneralFailure();
+    final location = const Location(latitude: 10.76, longitude: 106.66);
+    const failure = GeneralFailure('API error');
+
     when(mockWeatherRepository.getWeather(10.76, 106.66))
-        .thenAnswer((_) async => Error(failure));
+        .thenAnswer((_) async => const Error(failure));
 
-    final result = await usecase(LocationParams(lat: 10.76, lon: 106.66));
+    final result = await usecase(location);
 
-    expect(result, isA<Error>());
-    expect((result as Error).error, failure);
+    switch (result) {
+      case Success():
+        fail('Expected Error but got Success');
+      case Error():
+        expect(result.error.toString(), failure.toString());
+    }
     verify(mockWeatherRepository.getWeather(10.76, 106.66)).called(1);
   });
 }

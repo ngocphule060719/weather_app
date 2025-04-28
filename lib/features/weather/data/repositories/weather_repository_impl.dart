@@ -20,7 +20,7 @@ class WeatherRepositoryImpl extends WeatherRepository {
     }
 
     if (result is Error) {
-      return Result.error(result.error as Failure);
+      return result;
     }
 
     return Result.error(const GeneralFailure('No data available'));

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:weather_app/core/services/location_service.dart';
@@ -84,7 +86,8 @@ void main() {
 
       expect(
         locationService.requestLocationPermission(),
-        throwsA(isA<PermissionDeniedException>()),
+        throwsA(predicate((e) =>
+            e.toString().contains('Location permission permanently denied'))),
       );
     });
   });
@@ -114,7 +117,18 @@ void main() {
 
       expect(
         locationService.getCurrentPosition(),
-        throwsA(isA<Exception>()),
+        throwsA(predicate(
+            (e) => e.toString().contains('Failed to fetch location'))),
+      );
+    });
+
+    test('throws Exception when location request times out', () async {
+      fakeGeolocator.exception = TimeoutException('Location request timed out');
+
+      expect(
+        locationService.getCurrentPosition(),
+        throwsA(predicate(
+            (e) => e.toString().contains('Location request timed out'))),
       );
     });
   });
