@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:weather_app/core/error/failures.dart';
+import 'package:weather_app/core/utils/result.dart';
 import 'package:weather_app/features/weather/domain/entities/weather.dart';
 import 'package:weather_app/features/weather/domain/repositories/weather_repository.dart';
 import 'package:weather_app/features/weather/domain/usecases/get_weather.dart';
@@ -28,23 +29,24 @@ void main() {
         ]);
 
     when(mockWeatherRepository.getWeather(10.76, 106.66))
-        .thenAnswer((_) async => (null, weather));
+        .thenAnswer((_) async => Success(weather));
 
     final result = await usecase(LocationParams(lat: 10.76, lon: 106.66));
 
-    expect(result.$1, isNull);
-    expect(result.$2, weather);
+    expect(result, isA<Success<Weather>>());
+    expect((result as Success<Weather>).data, weather);
     verify(mockWeatherRepository.getWeather(10.76, 106.66)).called(1);
   });
 
   test('GetWeather should return Failure on error', () async {
+    const failure = GeneralFailure();
     when(mockWeatherRepository.getWeather(10.76, 106.66))
-        .thenAnswer((_) async => (const GeneralFailure(), null));
+        .thenAnswer((_) async => Error(failure));
 
     final result = await usecase(LocationParams(lat: 10.76, lon: 106.66));
 
-    expect(result.$1, isA<GeneralFailure>());
-    expect(result.$2, isNull);
+    expect(result, isA<Error>());
+    expect((result as Error).error, failure);
     verify(mockWeatherRepository.getWeather(10.76, 106.66)).called(1);
   });
 }

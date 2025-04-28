@@ -1,6 +1,9 @@
 import 'package:weather_app/core/error/failures.dart';
+import 'package:weather_app/core/utils/result.dart';
 import 'package:weather_app/features/weather/data/datasources/weather_remote_data_source.dart';
+import 'package:weather_app/features/weather/data/models/weather_model.dart';
 import 'package:weather_app/features/weather/domain/entities/weather.dart';
+import 'package:weather_app/features/weather/domain/entity_transform.dart';
 import 'package:weather_app/features/weather/domain/repositories/weather_repository.dart';
 
 class WeatherRepositoryImpl extends WeatherRepository {
@@ -9,16 +12,17 @@ class WeatherRepositoryImpl extends WeatherRepository {
   WeatherRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<(Failure?, Weather?)> getWeather(double lat, double lon) async {
-    final (failure, weather) = await remoteDataSource.getWeather(lat, lon);
-    if (failure != null) {
-      return (failure, null);
+  Future<Result<Weather>> getWeather(double lat, double lon) async {
+    final result = await remoteDataSource.getWeather(lat, lon);
+
+    if (result is Success<WeatherModel>) {
+      return Result.success(result.data.toEntity());
     }
 
-    if (weather != null) {
-      return (null, weather.toEntity());
+    if (result is Error) {
+      return Result.error(result.error as Failure);
     }
 
-    return (const GeneralFailure('No data available'), null);
+    return Result.error(const GeneralFailure('No data available'));
   }
 }

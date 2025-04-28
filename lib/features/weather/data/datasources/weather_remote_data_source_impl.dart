@@ -3,6 +3,7 @@ import 'package:weather_app/core/error/failures.dart';
 import 'package:weather_app/core/network/network_client.dart';
 import 'package:weather_app/core/utils/error_utils.dart';
 import 'package:weather_app/core/utils/parser.dart';
+import 'package:weather_app/core/utils/result.dart';
 import 'package:weather_app/features/weather/data/datasources/weather_remote_data_source.dart';
 import 'package:weather_app/features/weather/data/models/weather_model.dart';
 
@@ -12,7 +13,7 @@ class WeatherRemoteDataSourceImpl extends WeatherRemoteDataSource {
   WeatherRemoteDataSourceImpl({required this.networkClient});
 
   @override
-  Future<(Failure?, WeatherModel?)> getWeather(double lat, double lon) async {
+  Future<Result<WeatherModel>> getWeather(double lat, double lon) async {
     try {
       final response = await networkClient.get(
         '/onecall',
@@ -26,14 +27,15 @@ class WeatherRemoteDataSourceImpl extends WeatherRemoteDataSource {
 
       if (_isSuccess(response)) {
         final weather = WeatherModel.fromJson(response.data);
-        return (null, weather);
+        return Result.success(weather);
       }
 
-      return (GeneralFailure(ErrorParser.parseApiError(response.data)), null);
+      return Result.error(
+          GeneralFailure(ErrorParser.parseApiError(response.data)));
     } on DioException catch (error) {
-      return (GeneralFailure(ErrorParser.parseDioError(error)), null);
+      return Result.error(GeneralFailure(ErrorParser.parseDioError(error)));
     } catch (error) {
-      return (GeneralFailure('Unexpected error: $error'), null);
+      return Result.error(GeneralFailure('Unexpected error: $error'));
     }
   }
 

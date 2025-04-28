@@ -23,6 +23,7 @@ A Flutter Weather app displaying current temperature, location, and a 4-day fore
     ```dart
     const String WEATHER_API_KEY = 'YOUR_API_KEY';
     const String WEATHER_API_BASE_URL = 'https://api.openweathermap.org/data/3.0';
+    ```
 7. Generate mocks for tests: `flutter pub run build_runner build --delete-conflicting-outputs`.
 8. Grant location permissions when prompted (Android: enable GPS and allow location access).
 
@@ -30,16 +31,17 @@ A Flutter Weather app displaying current temperature, location, and a 4-day fore
 - Platform permissions are configured separately to enable location-based weather features.
 
 ## Architecture
-- Follows Clean Architecture with layers: core, app, features/weather.
+- Follows Clean Architecture with strict layer separation and dependency rules.
 - Core includes:
     - `Failure`: Error handling extend `Equatable` (default display message: "Something went wrong at our end!").
-    - `Parser`: Robust JSON parsing.
+    - `Parser`: Robust JSON parsing with type-safe extensions.
     - `NetworkClient`: Scalable Dio setup (get, post, put, delete methods, interceptors for headers/logging).
     - `UseCase`: Base class for use cases.
     - `LocationService`: Manages location access with two functions:
         - `requestLocationPermission`: Requests/checks location permissions, throwing exceptions.
         - `getCurrentLocation`: Fetches device coordinates with a 10-second timeout.
     - `AppTheme`: Defines light theme with centralized `AppColors`
+    - `Result<T>`: Generic wrapper for success/error handling
 - App: 
     - Uses `GetX` for dependency injection, initialized in `lib/app/di/dependencies.dart`.
     - `main.dart`: Entry point, applies theme, and renders `WeatherScreen` with `WeatherBloc`.

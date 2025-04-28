@@ -6,6 +6,7 @@ import 'package:mockito/mockito.dart';
 import 'package:weather_app/core/error/failures.dart';
 import 'package:weather_app/core/services/location_service.dart';
 import 'package:weather_app/core/utils/error_utils.dart';
+import 'package:weather_app/core/utils/result.dart';
 import 'package:weather_app/features/weather/domain/entities/weather.dart';
 import 'package:weather_app/features/weather/domain/usecases/get_weather.dart';
 import 'package:weather_app/features/weather/presentation/bloc/weather_bloc.dart';
@@ -54,7 +55,8 @@ void main() {
             .thenAnswer((_) async => true);
         when(mockLocationService.getCurrentPosition())
             .thenAnswer((_) async => location);
-        when(mockGetWeather(any)).thenAnswer((_) async => (null, weather));
+        when(mockGetWeather(any))
+            .thenAnswer((_) async => Result.success(weather));
         return weatherBloc;
       },
       act: (bloc) => bloc.add(const FetchWeather()),
@@ -98,8 +100,8 @@ void main() {
             .thenAnswer((_) async => true);
         when(mockLocationService.getCurrentPosition())
             .thenAnswer((_) async => location);
-        when(mockGetWeather(any))
-            .thenAnswer((_) async => (const GeneralFailure('API error'), null));
+        when(mockGetWeather(any)).thenAnswer(
+            (_) async => Result.error(const GeneralFailure('API error')));
         return weatherBloc;
       },
       act: (bloc) => bloc.add(const FetchWeather()),

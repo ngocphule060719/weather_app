@@ -1,5 +1,5 @@
-import 'package:weather_app/core/error/failures.dart';
+import 'package:weather_app/core/utils/result.dart';
 
 abstract class Usecase<Type, Params> {
-  Future<(Failure?, Type?)> call(Params params);
+  Future<Result<Type>> call(Params params);
 }

@@ -22,14 +22,6 @@ class WeatherModel {
           .toList(),
     );
   }
-
-  Weather toEntity() {
-    return Weather(
-      currentTemperature: currentWeather.toEntity(),
-      locationName: locationName.split('/').last.replaceAll("_", " "),
-      dailyForecasts: dailyWeathers.map((e) => e.toEntity()).toList(),
-    );
-  }
 }
 
 class CurrentWeatherModel {

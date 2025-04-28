@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:weather_app/core/error/failures.dart';
+import 'package:weather_app/core/utils/result.dart';
 import 'package:weather_app/features/weather/data/datasources/weather_remote_data_source.dart';
 import 'package:weather_app/features/weather/data/models/weather_model.dart';
 import 'package:weather_app/features/weather/data/repositories/weather_repository_impl.dart';
@@ -29,37 +30,38 @@ void main() {
     );
 
     when(mockDataSource.getWeather(10.76, 106.66))
-        .thenAnswer((_) async => (null, weatherModel));
+        .thenAnswer((_) async => Result.success(weatherModel));
 
     final result = await repository.getWeather(10.76, 106.66);
 
-    expect(result.$1, isNull);
-    expect(result.$2, isA<Weather>());
-    expect(result.$2!.locationName, 'Ho Chi Minh');
-    expect(result.$2!.currentTemperature, 30.0);
-    expect(result.$2!.dailyForecasts.first.avgTemperature, 31.0);
+    expect(result, isA<Success<Weather>>());
+    final weather = (result as Success<Weather>).data;
+    expect(weather.locationName, 'Ho Chi Minh');
+    expect(weather.currentTemperature, 30.0);
+    expect(weather.dailyForecasts.first.avgTemperature, 31.0);
     verify(mockDataSource.getWeather(10.76, 106.66)).called(1);
   });
 
   test('getWeather returns Failure on error', () async {
+    const failure = GeneralFailure();
     when(mockDataSource.getWeather(10.76, 106.66))
-        .thenAnswer((_) async => (const GeneralFailure(), null));
+        .thenAnswer((_) async => Result.error(failure));
 
     final result = await repository.getWeather(10.76, 106.66);
 
-    expect(result.$1, isA<GeneralFailure>());
-    expect(result.$2, isNull);
+    expect(result, isA<Error>());
+    expect((result as Error).error, failure);
     verify(mockDataSource.getWeather(10.76, 106.66)).called(1);
   });
 
-  test('getWeather returns Failure when WeatherModel is null', () async {
-    when(mockDataSource.getWeather(10.76, 106.66))
-        .thenAnswer((_) async => (null, null));
+  test('getWeather returns Failure when data source returns error', () async {
+    when(mockDataSource.getWeather(10.76, 106.66)).thenAnswer(
+        (_) async => Result.error(const GeneralFailure('No data available')));
 
     final result = await repository.getWeather(10.76, 106.66);
 
-    expect(result.$1, isA<GeneralFailure>());
-    expect(result.$2, isNull);
+    expect(result, isA<Error>());
+    expect((result as Error).error, isA<GeneralFailure>());
     verify(mockDataSource.getWeather(10.76, 106.66)).called(1);
   });
 }
