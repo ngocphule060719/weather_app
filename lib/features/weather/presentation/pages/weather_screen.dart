@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:weather_app/features/weather/presentation/bloc/weather_bloc.dart';
-import 'package:weather_app/features/weather/presentation/bloc/weather_event.dart';
-import 'package:weather_app/features/weather/presentation/bloc/weather_state.dart';
+import 'package:weather_app/features/weather/presentation/cubit/weather_cubit.dart';
+import 'package:weather_app/features/weather/presentation/cubit/weather_state.dart';
 import 'package:weather_app/features/weather/presentation/widgets/error_widget.dart';
 import 'package:weather_app/features/weather/presentation/widgets/loading_widget.dart';
 import 'package:weather_app/features/weather/presentation/widgets/weather_info_widget.dart';
@@ -13,7 +12,7 @@ class WeatherScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocBuilder<WeatherBloc, WeatherState>(
+      body: BlocBuilder<WeatherCubit, WeatherState>(
         builder: (context, state) => switch (state) {
           WeatherInitial() || WeatherLoading() => const LoadingWidget(),
           WeatherLoaded(:final weather) => WeatherInfoWidget(
@@ -21,8 +20,7 @@ class WeatherScreen extends StatelessWidget {
             ),
           WeatherError(:final failure) => WeatherErrorWidget(
               failure: failure,
-              onRetry: () =>
-                  context.read<WeatherBloc>().add(const FetchWeather()),
+              onRetry: () => context.read<WeatherCubit>().fetchWeather(),
             ),
           _ => const SizedBox.shrink(),
         },

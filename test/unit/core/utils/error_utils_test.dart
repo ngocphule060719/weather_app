@@ -56,14 +56,15 @@ void main() {
 
     group('parseLocationError', () {
       test('returns permission denied message', () {
-        final error = const PermissionDeniedException('Permission denied');
+        const error = PermissionDeniedException('Permission denied');
 
         final result = ErrorParser.parseLocationErrror(error);
-        expect(result, 'Location permission denied. Please enable location services.');
+        expect(result,
+            'Location permission denied. Please enable location services.');
       });
 
       test('returns service disabled message', () {
-        final error = const LocationServiceDisabledException();
+        const error = LocationServiceDisabledException();
 
         final result = ErrorParser.parseLocationErrror(error);
         expect(result, 'Location services are disabled. Please enable GPS.');

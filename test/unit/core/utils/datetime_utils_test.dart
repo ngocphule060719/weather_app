@@ -1,7 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:weather_app/core/utils/datetime_utils.dart';
 
-
 void main() {
   group('DateTimeX extension', () {
     test('copyWithoutTime returns a copy with time fields set to zero', () {

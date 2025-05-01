@@ -20,8 +20,9 @@ void main() {
     usecase = GetWeather(repository: mockWeatherRepository);
   });
 
+  const location = Location(latitude: 10.76, longitude: 106.66);
+
   test('GetWeather should return Weather on success', () async {
-    final location = const Location(latitude: 10.76, longitude: 106.66);
     final weather = Weather(
       currentTemperature: 30.0,
       locationName: 'HoChiMinh',
@@ -45,7 +46,6 @@ void main() {
   });
 
   test('GetWeather should return Failure on error', () async {
-    final location = const Location(latitude: 10.76, longitude: 106.66);
     const failure = GeneralFailure('API error');
 
     when(mockWeatherRepository.getWeather(10.76, 106.66))
